@@ -6,9 +6,18 @@
 #include <common.hpp>
 #include <format>
 #include <sstream>
-
+#include <algorithm>
+#include <iterator>
 using namespace std;
+using namespace std::chrono_literals;
 
+std::string trim(const std::string& str)
+{
+    auto start = std::find_if_not(str.begin(), str.end(), ::isspace);
+    auto end = std::find_if_not(str.rbegin(), str.rend(), ::isspace).base();
+
+    return (start < end) ? std::string(start, end) : std::string();
+}
 
 int main() {
     std::cout << "命名管道通信客户端!\n";
@@ -44,7 +53,9 @@ int main() {
         string input_data;
         //  std::getline(std::cin, input_data);
         cin >> input_data;
-
+        if (trim(input_data).empty()) {
+            continue;
+        }
         
 
         string data =std::format("{} {}", input_data , now_stamp());
@@ -70,7 +81,7 @@ int main() {
 
 
         // 暂停一段时间
-        this_thread::sleep_for(std::chrono::milliseconds(500));
+        this_thread::sleep_for(500ms);
     }
 
     // 关闭管道
