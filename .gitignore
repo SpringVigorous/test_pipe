@@ -1,0 +1,29 @@
+
+### STS ###
+.settings/
+.vs/
+build/
+.settings
+.vscode/
+bin/
+3rd/
+
+
+!3rd/vcpkg_list.txt
+
+### vscode ###
+.vscode
+
+### logs ###
+/logs/
+*.log
+
+### temp ignore ###
+*.cache
+*.diff
+*.patch
+*.tmp
+*.java~
+*.properties~
+*.xml~
+
