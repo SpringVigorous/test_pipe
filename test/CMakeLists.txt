@@ -1,6 +1,5 @@
 ﻿
 
-# enable_testing()
 
 
 # add_test(AllTestsInMain main)
@@ -9,7 +8,7 @@
 
 include(GoogleTest)
 
-option(ENABLE_PROFILER "enable dapr")
+#option(ENABLE_PROFILER "enable dapr")
 
 file(GLOB_RECURSE ALL_SOURCE *.cpp *.hxx)
 
@@ -18,27 +17,28 @@ include_directories(${CMAKE_SOURCE_DIR}/src/pc_pipe/include)
 include_directories(${CMAKE_SOURCE_DIR}/src/pc_win/include)
 include_directories(${CMAKE_SOURCE_DIR}/src/process_tools/include)
 
+set(TEST_EXE test )
 
-add_executable(${PROJECT_NAME} ${ALL_SOURCE})
+add_executable(${TEST_EXE} ${ALL_SOURCE})
+enable_testing()
 
 
-
-gtest_discover_tests(${PROJECT_NAME}
+gtest_discover_tests(${TEST_EXE}
                      WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 
 
-target_compile_definitions(${PROJECT_NAME}
+target_compile_definitions(${TEST_EXE}
                            PRIVATE PROJECT_FOLDER="${CMAKE_SOURCE_DIR}")
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${TEST_EXE} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 find_package(GTest REQUIRED)
 
 if((NOT WIN32) AND ENABLE_PROFILER)
   add_definitions(-DENABLE_PROFILER)
   target_link_libraries(
-    ${PROJECT_NAME} profiler
+    ${TEST_EXE} profiler
     PRIVATE GTest::gmock
             GTest::gtest
             GTest::gmock_main
@@ -47,10 +47,11 @@ if((NOT WIN32) AND ENABLE_PROFILER)
 )
 else()
   target_link_libraries(
-    ${PROJECT_NAME}
+    ${TEST_EXE}
     PRIVATE GTest::gmock
             GTest::gtest
             GTest::gmock_main
             GTest::gtest_main
             process_tools)
 endif()
+

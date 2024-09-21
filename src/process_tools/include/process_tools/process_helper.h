@@ -6,19 +6,25 @@
 _PPROCESS_TOOLS_BEGIN_
 
 PPROCESS_TOOLS_API std::string cur_time();
-
 PPROCESS_TOOLS_API int is_running(int pid);
 PPROCESS_TOOLS_API std::tuple<bool, std::string> kill_child_process(int pid);
 PPROCESS_TOOLS_API std::tuple<bool, std::string> kill_process(int pid, bool isChild = true);
 PPROCESS_TOOLS_API std::tuple<int, std::string> start_process(const std::string& processName, const std::string& processArgv);
 PPROCESS_TOOLS_API std::tuple<std::vector<int>, std::string> get_process_pids_by_name(const std::string& processName);
+
+
 _PPROCESS_TOOLS_END_
 
 
 /*用法示例
 #include "process_helper.h"
 
+
+
+
+
 int main() {
+
   std::string processArgv = "test.txt";
   std::string processName = "notepad";
   // 启动进程

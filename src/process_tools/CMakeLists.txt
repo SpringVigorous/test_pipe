@@ -1,8 +1,11 @@
 ﻿
 
+
+
+
 set(PROCESS_TOOLS process_tools)
 
-FILE(GLOB_RECURSE process_tools_hds include/${CURDLL}/*.*)
+FILE(GLOB_RECURSE process_tools_hds include/${PROCESS_TOOLS}/*.*)
 FILE(GLOB_RECURSE process_tools_srcs src/*.*)
 
 set(process_tools_all ${process_tools_hds} ${process_tools_srcs})
@@ -16,6 +19,7 @@ set_target_properties(${PROCESS_TOOLS} PROPERTIES DEBUG_POSTFIX _d)
 
 
 target_link_libraries(${PROCESS_TOOLS} PRIVATE Boost::process  Boost::filesystem Boost::locale)
+
 target_include_directories(${PROCESS_TOOLS} PUBLIC include )
 
 

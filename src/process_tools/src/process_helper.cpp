@@ -155,7 +155,7 @@ std::tuple<int, std::string> start_process(const std::string& processName, const
     std::string err;
     try {
 #if defined(BOOST_WINDOWS_API)
-        auto p = processName + ".exe";
+        auto p = processName /*+ ".exe"*/;
         if (!boost::filesystem::exists(p)) {
             p = boost::filesystem::current_path().string() + "/" + p;
             if (!boost::filesystem::exists(p)) {

@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <string>
 #include <common.hpp>
+#include "process_tools/process_helper.h"
 using namespace std;
 
 // 完成例程
@@ -24,8 +25,8 @@ void create_client()
     // 指定要启动的可执行文件路径
     std::string executablePath = R"(F:\test\test_pipe\build\debug\bin\win_client_d.exe)";  // 替换为实际路径
     std::string arguments = "";  // 可选参数
-
-    if (createDetachedProcess(executablePath, arguments))
+    auto [result,__] = PPROCESS_TOOLS::start_process(executablePath, arguments);
+    if (result>0)
     {
         std::cout << "子进程启动成功。\n";
     }

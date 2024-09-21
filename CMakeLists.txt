@@ -56,12 +56,12 @@ include_directories(${VCPKG_INCLUDE})
 
 
 project(asio_example)
-find_package(Boost REQUIRED COMPONENTS asio)
-find_package(boost_process REQUIRED CONFIG)
+
 
 
 
 
 
 add_subdirectory(src)
+add_subdirectory(test)
 

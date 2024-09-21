@@ -1,4 +1,7 @@
-﻿file(GLOB sources CONFIGURE_DEPENDS "*.cpp")
+﻿find_package(Boost REQUIRED COMPONENTS asio)
+
+
+file(GLOB sources CONFIGURE_DEPENDS "src/*.cpp")
 foreach(source IN LISTS sources)
     get_filename_component(name ${source} NAME_WE)
     add_executable(${name} ${source})
