@@ -6,13 +6,33 @@
 using namespace std;
 
 // 完成例程
-void CompletionRoutine(DWORD dwErrorCode, DWORD dwNumberOfBytesTransfered, LPOVERLAPPED lpOverlapped) {
-    if (dwErrorCode != 0) {
-        CheckLastError("Error in completion routine");
-    }
+static VOID WINAPI CompletionRoutine(DWORD dwErrorCode, DWORD dwNumberOfBytesTransferred, LPOVERLAPPED lpOverlapped) {
+    // 更新实际读取的数据大小
+    OVERLAPPED* pOverlapped = reinterpret_cast<OVERLAPPED*>(lpOverlapped);
 
-    // 重新发起读取操作
-    ReadFileEx(reinterpret_cast<HANDLE>(lpOverlapped->hEvent), nullptr, 0, lpOverlapped, CompletionRoutine);
+    // 获取实际读取的数据大小
+    DWORD bytesRead = 0;
+    GetOverlappedResult(pOverlapped->hEvent, pOverlapped, &bytesRead, FALSE);
+
+    // 在这里可以处理读取完成后的数据
+    cout << "完成例程调用，读取字节数: " << bytesRead << endl;
+}
+
+
+void create_client()
+{
+    // 指定要启动的可执行文件路径
+    std::string executablePath = R"(F:\test\test_pipe\build\debug\bin\win_client_d.exe)";  // 替换为实际路径
+    std::string arguments = "";  // 可选参数
+
+    if (createDetachedProcess(executablePath, arguments))
+    {
+        std::cout << "子进程启动成功。\n";
+    }
+    else
+    {
+        std::cout << "子进程启动失败。\n";
+    }
 }
 int main() {
 
@@ -20,10 +40,6 @@ int main() {
     // 创建 OVERLAPPED 结构
     OVERLAPPED overlapped = {};
     overlapped.hEvent = CreateEvent(NULL, TRUE, FALSE, event_name);
-
-
-
-
 
     std::cout << "命名管道通信服务端!\n";
 
@@ -44,7 +60,7 @@ int main() {
     }
 
     std::cout << "命名管道创建成功\n";
-
+    create_client();
     // 连接命名管道
     if (!ConnectNamedPipe(pipe, NULL)) {
         DWORD error = GetLastError();
@@ -79,11 +95,15 @@ int main() {
         // 等待事件
         DWORD result = WaitForSingleObject(overlapped.hEvent, INFINITE);
         if (result == WAIT_OBJECT_0) {
-            std::cout << "接收到数据: " << buf << "\n";
-        }
-        if (!ResetEvent(overlapped.hEvent)) {
-            CheckLastError("ResetEvent failed");
+            DWORD bytesRead = 0;
+            GetOverlappedResult(pipe, &overlapped, &bytesRead, FALSE);
 
+            std::cout << now_stamp() << " 接收到数据: " << std::string(buf, bytesRead) << "\n";
+
+            // 清除事件状态
+            if (!ResetEvent(overlapped.hEvent)) {
+                CheckLastError("ResetEvent failed");
+            }
         }
     }
 
