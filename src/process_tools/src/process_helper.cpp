@@ -112,8 +112,8 @@ std::tuple<std::vector<int>, std::string> get_process_pids_by_name(const std::st
     try {
 #if defined(BOOST_WINDOWS_API)
         std::wstring wName;
-        std::string exe(".exe");
-        wName = boost::locale::conv::to_utf<wchar_t>(processName + exe, "GBK");
+
+        wName = boost::locale::conv::to_utf<wchar_t>(processName , "GBK");
         HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
         PROCESSENTRY32W entry;
         entry.dwSize = sizeof entry;

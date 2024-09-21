@@ -32,6 +32,8 @@ inline std::string now_stamp() {
     return stream.str();
 
 }
+
+//废弃
 inline bool createDetachedProcess(const std::string& executablePath, const std::string& arguments = "")
 {
     STARTUPINFOA si = { sizeof(STARTUPINFOA) };

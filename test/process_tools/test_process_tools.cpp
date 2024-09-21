@@ -1,13 +1,13 @@
 ﻿
 #include "gtest/gtest.h"
 #include "process_tools/process_helper.h"
-
-
- TEST(AsioExample, TestProcessTools) {
+#include <format> 
+TEST(AsioExample, TestProcessTools) {
      std::string processArgv = R"(C:\Users\Administrator\Desktop\vcpkg_export.txt)";
-     std::string processName = R"(C:\Windows\System32\notepad.exe)";
+     std::string processName ="notepad.exe";
+     std::string process_path =std::format(R"({}/{})", R"(C:\Windows\System32)",processName);
      // 启动进程
-     auto newtup = PPROCESS_TOOLS::start_process(processName, processArgv);
+     auto newtup = PPROCESS_TOOLS::start_process(process_path, processArgv);
      auto pid = std::get<0>(newtup);
 
      // 查询进程是否在运行
